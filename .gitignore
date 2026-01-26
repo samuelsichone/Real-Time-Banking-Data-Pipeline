@@ -1,0 +1,76 @@
+# ===============================
+# Secrets & Environment
+# ===============================
+.env
+.env.*
+*.pem
+*.key
+*.crt
+
+# ===============================
+# Python
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+
+# ===============================
+# dbt
+# ===============================
+target/
+dbt_packages/
+logs/
+*.log
+
+# ===============================
+# Airflow
+# ===============================
+docker/logs/
+airflow/logs/
+airflow.cfg
+webserver_config.py
+
+# ===============================
+# Docker
+# ===============================
+**/data/
+*.tar
+docker-compose.override.yml
+
+# ===============================
+# Kafka / Debezium
+# ===============================
+docker/kafka/data/
+docker/postgres/data/
+connect-offsets/
+connect-configs/
+connect-status/
+
+# ===============================
+# MinIO / S3
+# ===============================
+docker/minio/data/
+
+# ===============================
+# IDE / OS
+# ===============================
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# ===============================
+# CI / Build Artifacts
+# ===============================
+dist/
+build/
+coverage/
