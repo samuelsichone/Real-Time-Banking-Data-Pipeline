@@ -21,7 +21,7 @@ accounts_deduped as (
         *,
         row_number() over (
             partition by account_id
-            order by updated_at desc
+            order by created_at desc
         ) as rn
     from {{ ref('stg_accounts') }}
 
