@@ -7,23 +7,10 @@ It ingests real-time CDC events, persists them as partitioned Parquet files, and
 The goal is to demonstrate production-style data engineering practices, including streaming ingestion, historical tracking (SCD Type 2), containerization, and orchestration.
 
 🏗️ Architecture
-Postgres (Banking Source)
-   ↓  CDC
-Kafka Topics
-   ↓
-Python Consumers (Buffered)
-   ↓
-Parquet Files (Partitioned by time & entity)
-   ↓
-Snowflake (External / Raw Tables)
-   ↓
-dbt Staging (stg_)
-   ↓
-dbt Snapshots (SCD Type 2)
-   ↓
-Dimensional Models (Facts & Dimensions)
-   ↓
-Analytics / BI
+<div align="center">
+  <img src="./diagram.png" />
+</div>
+
 
 🔧 Tech Stack
 
@@ -195,3 +182,4 @@ Modern analytics engineering practices
 Debugging real containerized systems
 
 It mirrors enterprise-grade data pipelines, not toy examples.
+
