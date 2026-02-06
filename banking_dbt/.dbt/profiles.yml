@@ -1,0 +1,13 @@
+banking_dbt:
+  outputs:
+    dev:
+      account: hb22482.af-south-1.aws
+      database: banking
+      password: 3980butwhatAKA$$
+      role: accountadmin
+      schema: analytics
+      threads: 4
+      type: snowflake
+      user: samuelsichone
+      warehouse: W_H
+  target: dev
