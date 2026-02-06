@@ -14,25 +14,30 @@ The goal is to demonstrate production-style data engineering practices, includin
 
 🔧 Tech Stack
 
-PostgreSQL – Source banking database
+PostgreSQL – Source transactional banking database
 
-Kafka – Change Data Capture (CDC) streaming
+Apache Kafka – CDC event streaming
 
-Python – Kafka consumers & Parquet writer
+Python – Kafka consumers & Parquet data writer
 
-Parquet – Efficient columnar storage
+Parquet + S3/Object Storage – Partitioned data lake storage
 
-Snowflake – Analytics data warehouse
+Apache Airflow – Workflow orchestration & scheduling
 
-dbt – Transformations, snapshots, dimensional modeling
+Snowflake – Cloud analytics data warehouse
 
-Apache Airflow – Orchestration & scheduling
+dbt – Data transformations & dimensional modeling
 
-Docker – Containerized environment
+Docker – Containerized execution environment
 
-📥 Data Ingestion (Streaming Layer)
+Power BI (DirectQuery) – Real-time analytics dashboards
 
-CDC events are streamed via Kafka topics:
+📥 Data Pipeline Architecture
+🔄 Ingestion Layer
+
+Banking data captured from PostgreSQL via CDC.
+
+Events streamed through Kafka topics:
 
 transactions
 
@@ -40,41 +45,42 @@ customers
 
 accounts
 
-Python consumers buffer events in memory
+Python consumers buffer and write data into:
 
-Events are flushed periodically into Parquet files
+Partitioned Parquet files
 
-Files are partitioned by:
+Stored in S3/Object Storage
 
-entity
+Partition structure:
 
-year / month / day / hour
+entity/year/month/day/hour/batch.parquet
 
-Example:
+⏱️ Orchestration (Airflow)
 
-transactions/2026/01/29/16/batch-1769696191.parquet
-customers/2026/01/29/16/batch-1769696192.parquet
-accounts/2026/01/29/16/batch-1769696192.parquet
+Airflow DAGs manage the full pipeline:
 
+Load Parquet files from S3 → Snowflake RAW layer
 
-This approach avoids small files and optimizes downstream analytics performance.
+Trigger dbt transformations
 
-🔄 Transformation Layer (dbt)
-1️⃣ Staging Layer (stg_)
+Execute snapshots & marts
 
-Logical staging layer built in dbt
+Handle retries and scheduling
 
-Standardizes raw Parquet-backed tables
+❄️ Snowflake Data Modeling (dbt)
+1️⃣ RAW Layer
 
-Applies:
+Data ingested directly from S3
 
-naming conventions
+Represents near-source structured tables
 
-type casting
+2️⃣ Staging Layer (stg_)
 
-basic data cleaning
+Data cleaning & type casting
 
-Example:
+Naming standardization
+
+Transformations
 
 stg_transactions
 
@@ -82,104 +88,65 @@ stg_customers
 
 stg_accounts
 
-2️⃣ Snapshots (SCD Type 2)
-
-dbt snapshots track historical changes
-
-Preserves:
-
-previous values
-
-effective date ranges
-
-Enables time-travel analysis and auditability
-
-Used for:
-
-Customers
-
-Accounts
-
 3️⃣ Dimensional Models
 
-Built on top of snapshots
+Built using dbt best practices:
 
-Optimized for Snowflake analytics
+Dimension Tables
+
+dim_customers
+
+dim_accounts
+
+Fact Tables
+
+fact_transactions
 
 Includes:
 
-Dimension tables (SCD2-aware)
+Historical tracking via SCD Type 2
 
-Fact tables for transactions
+Analytics-optimized schema
 
-This follows analytics engineering best practices.
+Business-ready datasets
 
-⏱️ Orchestration (Airflow)
+📊 Analytics Layer – Power BI
 
-Airflow DAGs orchestrate dbt runs:
+Power BI connects to Snowflake using DirectQuery
 
-Snapshots
+Enables near real-time dashboards
 
-Dimensional marts
+No data duplication
 
-Features:
+Supports operational and analytical reporting
 
-Retry logic
+✅ Project Completion Status
 
-Containerized execution
+✔ Real-time CDC ingestion
+✔ Kafka streaming pipeline
+✔ Parquet data lake layer
+✔ Airflow orchestration
+✔ Snowflake RAW ingestion
+✔ dbt staging models
+✔ SCD Type 2 snapshots
+✔ Dimensional models (Customers & Accounts)
+✔ Fact transactions model
+✔ Power BI DirectQuery dashboards
 
-Clear task separation
+🎯 Outcome
 
-dbt runs inside Docker containers for consistency
+This project demonstrates a full enterprise-grade modern data stack, covering:
 
-🐳 Containerization
+Real-time data engineering
 
-All services run as Docker containers
+Lakehouse architecture
 
-Ensures:
+Analytics engineering with dbt
 
-reproducible environments
+Workflow orchestration
 
-consistent dependency management
+Dimensional modeling
 
-production-like setup
+Production-style containerized systems
 
-Suitable for local development and CI/CD extension
-
-📊 Current Status
-
-✔ Real-time ingestion implemented
-✔ Parquet lake layer working
-✔ dbt staging models completed
-✔ SCD Type 2 snapshots implemented
-✔ Dimensional models in progress
-✔ Airflow orchestration configured
-
-🚀 Next Steps
-
-Finalize dbt marts
-
-Add dbt tests & data quality checks
-
-Improve logging & alerting
-
-Add dashboards (optional)
-
-Production hardening
-
-🎯 Why This Project Matters
-
-This project demonstrates:
-
-Real-time data ingestion
-
-Historical correctness (SCD Type 2)
-
-Separation of concerns (ingestion vs transformation)
-
-Modern analytics engineering practices
-
-Debugging real containerized systems
-
-It mirrors enterprise-grade data pipelines, not toy examples.
-
+Business intelligence delivery
